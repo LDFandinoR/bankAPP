@@ -39,100 +39,97 @@ export default function Header(){
     return (
         <>
       <Navbar collapseOnSelect expand="lg" bg="secondary" variant="dark" className="mb-4">
-      <Container fluid>
-      
-      <Navbar.Brand href="#">Your Bank App</Navbar.Brand>
-      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-
-      <Navbar.Collapse id="responsive-navbar-nav">
-
-        <Nav className="justify.content.center" bg="secondary" variant="pills" defaultActiveKey="/">
-
-          <Tooltip content="Home" 
-            direction="bottom"
-            tagName="nav-item"
-            background="white"
-            className="target">
-            <Nav.Item>
-              <Nav.Link onClick={() => handleBasicClick('/')} active={basicActive === '/'}as={Link} to="/home">Home</Nav.Link>
-            </Nav.Item> 
-          </Tooltip> 
-
-          <Tooltip content="Login" 
-            direction="bottom"
-            tagName="nav-item"
-            background="white"
-            className="target">
-            <Nav.Item>
-              <Nav.Link onClick={() => handleBasicClick('/login')} active={basicActive === '/login'}as={Link} to="/login">Login</Nav.Link>
-            </Nav.Item> 
-          </Tooltip> 
-
-          <Tooltip content="Create Account" 
-          
-            direction="bottom"
-            tagName="nav-item"
-            background="white"
-            className="target">
-            <Nav.Item>
-              <Nav.Link onClick={() => handleBasicClick('/createaccount')} active={basicActive === '/createaccount'} as={Link} to="/createaccount">Create Account</Nav.Link>
-            </Nav.Item>
-          </Tooltip>
-
-          <Tooltip content="Desposit" 
-            direction="bottom"
-            tagName="nav-item"
-            background="white"
-            className="target">
-            <Nav.Item>
-              <Nav.Link onClick={() => handleBasicClick('/deposit')} active={basicActive === '/deposit'} as={Link} to="/deposit">Deposit</Nav.Link>
-            </Nav.Item>
-          </Tooltip>
-
-          <Tooltip content="Desposit" 
-            direction="bottom"
-            tagName="nav-item"
-            background="white"
-            className="target">
-            <Nav.Item>
-              <Nav.Link onClick={() => handleBasicClick('/withdraw')} active={basicActive === '/withdraw'} as={Link} to="/withdraw">Withdraw</Nav.Link>
-            </Nav.Item>
-          </Tooltip>
-
-          <Tooltip content="All Data" 
-            direction="bottom"
-            tagName="nav-item"
-            background="white"
-            className="target">
-            <Nav.Item>
-              <Nav.Link onClick={() => handleBasicClick('/alldata')} active={basicActive === '/alldata'} as={Link} to="/alldata">Data</Nav.Link>
-            </Nav.Item>
-          </Tooltip>
-
-          
-
-
-        </Nav>
-        {user ? <>
-          <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
-            Signed in as: {user.displayName || user.email} 
-          </Navbar.Text>
-          {' '}
-
-          <Button 
-          variant="primary"
-          as="input"
-          size="sm"
-          type="submit"
-          value="Log Out"
-          onClick={handleLogout}
-          ></Button>
-
-        </Navbar.Collapse>
-        </>: <></> }
+        <Container fluid>
         
-        </Navbar.Collapse>
+          <Navbar.Brand href="#">Your Bank App</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+          <Navbar.Collapse id="responsive-navbar-nav">
+
+            <Nav className="justify.content.center" bg="secondary" defaultActiveKey="/">
+
+              <Tooltip content="Home" 
+                direction="bottom"
+                tagName="nav-item"
+                background="white"
+                className="target">
+                <Nav.Item>
+                  <Nav.Link onClick={() => handleBasicClick('/')} active={basicActive === '/'}as={Link} to="/home">Home</Nav.Link>
+                </Nav.Item> 
+              </Tooltip> 
+
+              
+              <Tooltip content="Desposit" 
+                direction="bottom"
+                tagName="nav-item"
+                background="white"
+                className="target">
+                <Nav.Item>
+                  <Nav.Link onClick={() => handleBasicClick('/deposit')} active={basicActive === '/deposit'} as={Link} to="/deposit">Deposit</Nav.Link>
+                </Nav.Item>
+              </Tooltip>
+
+              <Tooltip content="Withdraw" 
+                direction="bottom"
+                tagName="nav-item"
+                background="white"
+                className="target">
+                <Nav.Item>
+                  <Nav.Link onClick={() => handleBasicClick('/withdraw')} active={basicActive === '/withdraw'} as={Link} to="/withdraw">Withdraw</Nav.Link>
+                </Nav.Item>
+              </Tooltip>
+
+            </Nav>
+            {user ? <>
+              <Navbar.Collapse className="justify-content-end">
+                <Nav className="justify.content.center" bg="secondary">
+                  <Navbar.Text>
+                    Signed in as: {user.displayName || user.email} {' '}
+                  </Navbar.Text>
+                
+                  {' '}
+
+                  <Button 
+                    variant="primary"
+                    as="input"
+                    size="sm"
+                    type="submit"
+                    value="Log Out"
+                    onClick={handleLogout}
+                    ></Button>
+                </Nav>
+
+              </Navbar.Collapse>
+            </>: <>
+            <Navbar.Collapse className="justify-content-end">
+              <Nav className="justify.content.center" bg="secondary">
+                
+                <Tooltip content="Login" 
+                    direction="bottom"
+                    tagName="nav-item"
+                    background="white"
+                    className="target">
+                    <Nav.Item>
+                      <Nav.Link onClick={() => handleBasicClick('/login')} active={basicActive === '/login'}as={Link} to="/login">Login</Nav.Link>
+                    </Nav.Item> 
+                </Tooltip> 
+                
+                <Tooltip content="Create Account"   
+                    direction="bottom"
+                    tagName="nav-item"
+                    background="white"
+                    className="target">
+                    <Nav.Item>
+                      <Nav.Link onClick={() => handleBasicClick('/createaccount')} active={basicActive === '/createaccount'} as={Link} to="/createaccount">Create Account</Nav.Link>
+                    </Nav.Item>
+                </Tooltip>
+
+              </Nav>
+              </Navbar.Collapse>
+
+            </> }
+            
+          </Navbar.Collapse>
         </Container>
       </Navbar>
 
@@ -145,3 +142,13 @@ export default function Header(){
       </>
     );
   };
+
+/*  <Tooltip content="All Data" 
+            direction="bottom"
+            tagName="nav-item"
+            background="white"
+            className="target">
+            <Nav.Item>
+              <Nav.Link onClick={() => handleBasicClick('/alldata')} active={basicActive === '/alldata'} as={Link} to="/alldata">Data</Nav.Link>
+            </Nav.Item>
+          </Tooltip>*/

@@ -23,10 +23,6 @@ import { ProtectedRoute } from "./pages/protectedRoutes";
 /*<Route path="/deposit"         element={<ProtectedRoute><Deposit /></ProtectedRoute>} />
           <Route path="/withdraw"        element={<ProtectedRoute><Whithdraw /></ProtectedRoute>} />
           <Route path="/alldata"         element={<ProtectedRoute><AllData /></ProtectedRoute>} />
-          
-          
-          
-
           <Route path="*" element={<ErrorPage />} />*/
 
 function App() {
@@ -39,11 +35,10 @@ function App() {
         <Routes>
           <Route path="/login"           element={<Login />} />
           <Route path="/createaccount"   element={<CreateAccount />} />
-          <Route path="/"         element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/home"            element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/"                element={<Home />} />
+          <Route path="/home"            element={<Home />} />
           <Route path="/deposit"         element={<ProtectedRoute><Deposit /></ProtectedRoute>} />
           <Route path="/withdraw"        element={<ProtectedRoute><Whithdraw /></ProtectedRoute>} />
-          <Route path="/alldata"         element={<ProtectedRoute><AllData /></ProtectedRoute>} />
         </Routes>
         
     </Router>
