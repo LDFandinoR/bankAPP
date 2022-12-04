@@ -26,6 +26,7 @@ router.put('/user/:email', async (req, res) => {
   const email = req.params.email; 
   const  { balance } = req.body;
   const newBalance = { balance };
+  //console.log(newBalance)
   await User.findOneAndUpdate({email}, newBalance)
   //res.json({status: 0, message: 'User has been modified successfully'});
 });

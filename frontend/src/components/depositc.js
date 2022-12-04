@@ -21,9 +21,9 @@ const validateDeposit = (deposit) => {
   if (deposit < 0) {
     errors.error = 'You are introducing a negative number';
   } 
-  if(!deposit.trim()){
+  /*if(!deposit.trim()){
     errors.error = 'Required Field';
-  }
+  }*/
   return errors;
 }
 
@@ -31,14 +31,13 @@ const validateDeposit = (deposit) => {
 export default function DepositC(){
 
   const { user } = useAuth();
-
-  console.log('user en deposit', user)
-  let newTotal;
-  const [deposit, setDeposit] = React.useState(''); // form values
+  
   const [errors, setErrors] = React.useState({});
   const [balance, setBalance] = React.useState(null);
-  const [updating, setUpdating] = React.useState(false);
-  const navigate = useNavigate();
+  const [values, setValues] = React.useState({
+    deposit: 0
+  });
+  let newBalance;
 
 
   useEffect(() => {
@@ -56,38 +55,40 @@ export default function DepositC(){
 
   }, [balance])
 
+
   const handleChange = (e) => {
-    //e.preventDefault(); this cause a delay on the change. Do not use
-    setDeposit(e.target.value);
-    console.log('hola change');
-    newTotal = (Number(balance) + Number(deposit));
-    setBalance(newTotal);
-      //setErrors(validateDeposit(deposit));
+    const {name, value} = e.target;
+    setValues({
+        ...values, 
+        [name]: value,
+    });
   }
 
+
   const handleBlur = (e) => {
+    
+    setErrors('')
     handleChange(e);
-    setErrors(validateDeposit(deposit));
+    setErrors(validateDeposit(values.deposit));
+
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    //newTotal = (Number(balance) + Number(deposit));
-    //setBalance(balance => newTotal);
-    setUpdating(true);
-    console.log("updating ",updating)
-    console.log("balance before axios ", balance)
-    axios.put(`${process.env.REACT_APP_API_URL}/user/${user.email}`, {balance})
+    
+    newBalance = (Number(balance) + Number(values.deposit));
+    console.log("newBalance: ",newBalance)
+    axios.put(`${process.env.REACT_APP_API_URL}/user/${user.email}`, {balance: newBalance})
+    setBalance(() => Number(balance) + Number(values.deposit))
     alert('Successful Deposit!');
-    //navigate('/deposit')
-    setDeposit('')
+    e.preventDefault()
+
   }
 
   return (
     <Card className="text-center">
       <Card.Header>Deposit</Card.Header>
       <Card.Body>
-        <Card.Title>Balance</Card.Title>
+        <Card.Title>Balance: {balance}</Card.Title>
         <Card.Text>
         
         </Card.Text>
@@ -98,13 +99,13 @@ export default function DepositC(){
             <Form.Label>Deposit Amount</Form.Label>
             <InputGroup>
                 <Form.Control 
-                    id="nameField" 
-                    name="Deposit" 
-                    type="text"
+                    id="nameFieldD" 
+                    name="deposit" 
+                    type="number"
                     placeholder="Introduce a value" 
                     onBlur={handleBlur}
                     onChange={handleChange} 
-                    value={deposit}
+                    value={values.deposit}
                     isInvalid = {!!errors.error}
                     />
               <Form.Control.Feedback type="invalid">{errors.error}</Form.Control.Feedback>
@@ -113,7 +114,7 @@ export default function DepositC(){
 
 
         <Button
-        disabled={!!errors.error || deposit == ''}
+        disabled={!!errors.error || values.deposit == ''}
             variant="primary"
             as="input"
             size="lg"

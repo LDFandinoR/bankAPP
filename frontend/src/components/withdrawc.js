@@ -5,18 +5,22 @@ import { useState } from "react";
 import { boolean } from "yup";
 import { useAuth } from "../context/authContext";
 import axios from "axios";
+import { async } from "@firebase/util";
 
 
 const validateWithdraw = (withdraw, balance) => {
   let errors = {};
 
   if(!withdraw){
+    console.log("entre en !withdraw ")
     errors.error = 'Required Field';
-  } 
+  }
   if (isNaN(withdraw)){
+    console.log("entre en isNaN(withdraw)")
     errors.error = 'This is not a valid number';
   }
-  if (withdraw > balance) {
+  if (Math.abs(Number(withdraw)) > balance) {
+    console.log("entre en withdraw > balance")
     errors.error = 'You are introducing a number greater than the balance';
   } 
   return errors;
@@ -27,10 +31,14 @@ export default function WithdrawC(){
 
   const { user } = useAuth();
 
-  let newTotal;  
-  const [withdraw, setWithdraw] = React.useState(0); // form values 0
   const [errors, setErrors] = React.useState({});
   const [balance, setBalance] = React.useState(null);
+  const [values, setValues ] = React.useState({
+    withdraw: 0
+  });
+  let newBalance;
+
+  
 
   useEffect(() => {
 
@@ -44,62 +52,54 @@ export default function WithdrawC(){
   }).catch(function(error){
       console.log(error)
     })
+}, [balance])
 
-  }, [balance])
-
-  /*useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/user/${user.email}`)
-    .then(function(response){
-      console.log(response)
-    }).catch(function(error){
-      console.log(error)
-    })
-
-  }, [user])*/
+  
 
   const handleChange = (e) => {
-    setWithdraw(e.target.value);
-    console.log('hola change');
-    newTotal = (Number(balance) - Math.abs(Number(withdraw)));
-    setBalance(newTotal);
-      //setErrors(validatewithdraw(withdraw));
+
+    const {name, value} = e.target;
+    setValues({
+        ...values, 
+        [name]: value,
+    });
+
   }
 
+
   const handleBlur = (e) => {
+    
+    setErrors('')
     handleChange(e);
-    setErrors(validateWithdraw(withdraw, balance));
+    setErrors(validateWithdraw(values.withdraw, balance));
+    
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    //setUpdating(true);
-    //console.log("updating ",updating)
-    console.log("balance before axios ", balance)
-    axios.put(`${process.env.REACT_APP_API_URL}/user/${user.email}`, {balance})
-    alert('Successful Withdraw!');
-    //navigate('/deposit')
-    setWithdraw('')
+    
+    newBalance = (Number(balance) - Math.abs(Number(values.withdraw)));
+    console.log("newBalance: ",newBalance)
+    axios.put(`${process.env.REACT_APP_API_URL}/user/${user.email}`, {balance: newBalance})
+    setBalance(() => Number(balance) - Math.abs(Number(values.withdraw)))
+    alert('Successful withdraw!');
+    
+    e.preventDefault()
+  
   }
 
-    /*
-    //setErrors(validateWithdraw(withdraw, balance))
-    //newTotal = (Number(balance) - Math.abs(Number(withdraw)));
-    //ctx.users[0].balance = newTotal;
-    if (Object.keys(errors).length === 0){
-      setBalance(newTotal)
-      //setBalance(Number(ctx.users[0].balance) + Number(withdraw));
-      alert('Successful withdraw!');
-  } 
-    console.log('hola submit');
-    console.log('withdraw' + withdraw)
-  }*/
 
-//Cuerrent page 71 {ctx.users[0].name}, this is your balance {balance}
+
+
+
+
+
+
+
   return (
     <Card className="text-center">
       <Card.Header>Withdraw</Card.Header>
       <Card.Body>
-        <Card.Title>Balance</Card.Title>
+        <Card.Title>Balance: {balance}</Card.Title>
         <Card.Text>
         
         </Card.Text>
@@ -110,13 +110,13 @@ export default function WithdrawC(){
             <Form.Label>Withdraw Amount</Form.Label>
             <InputGroup>
                 <Form.Control 
-                    id="nameField" 
+                    id="nameFieldW" 
                     name="withdraw" 
-                    type="text"
+                    type="number"
                     placeholder="Introduce a value" 
                     onBlur={handleBlur}
                     onChange={handleChange} 
-                    value={withdraw}
+                    value={values.withdraw}
                     isInvalid = {!!errors.error}
                     />
               <Form.Control.Feedback type="invalid">{errors.error}</Form.Control.Feedback>
@@ -126,7 +126,7 @@ export default function WithdrawC(){
 
 
         <Button
-        disabled={!!errors.error || withdraw == ''}
+            disabled={!!errors.error || values.withdraw == ''}
             variant="primary"
             as="input"
             size="lg"
