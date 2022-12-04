@@ -12,6 +12,14 @@ var app     = express();
 // Settings
 app.set('port', process.env.PORT || 4000);
 
+// Used to serve static files from public directory
+app.use(express.static('public'));
+app.use(cors(
+  {
+    origin: process.env.ALLOWED_ORIGINS
+  }
+));
+
 // Middlewares
 //app.use(express.urlencoded({extended: false}));
 app.use(morgan('dev'));
