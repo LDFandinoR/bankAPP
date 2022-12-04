@@ -16,7 +16,7 @@ app.set('port', process.env.PORT || 4000);
 app.use(express.static('public'));
 app.use(cors(
   {
-    origin: process.env.ALLOWED_ORIGINS
+    origin: "https://bankapp-fe-fandir.onrender.com"
   }
 ));
 
